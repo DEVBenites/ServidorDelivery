@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+
+
+///////////////////////////////////////
+// STORES E SUAS TABELAS DEPENDENTES //
+///////////////////////////////////////
+
+model store {
+  id                  String    @id @default(uuid()) @db.VarChar(36)
+  name                String    @db.VarChar(50)
+  description         String?   @db.VarChar(200)
+  phones              String?   @db.VarChar(200)
+  cnpj                String    @unique @db.VarChar(30)
+  slug                String?   @db.VarChar(200)
+  createdAt           DateTime? @db.Timestamptz(6)
+  updatedAt           DateTime? @db.Timestamptz(6)
+
+  picture             String?   @db.VarChar(200)
+  cover               String?   @db.VarChar(200)
+ 
+  categories          storeCategory[]
+  users               storeUser[]
+  settings            storeSettings?
+  delivery            storeDelivery?
+  menus               menu[]
+}
+
+model promotion {
+  id              Int       @id @default(autoincrement())
+  name            String    @db.VarChar(50)
+  slug            String    @db.VarChar(50)
+  picture         String?   @db.VarChar(150)
+  cover           String?   @db.VarChar(150)
+
+}
+
+model storeCategory {
+  id              Int       @id @default(autoincrement())
+  name            String    @db.VarChar(50)
+  slug            String    @db.VarChar(50)
+  picture         String?   @db.VarChar(150)
+  cover           String?   @db.VarChar(150)
+  stores          store[]
+}
+
+
+model storeSettings {
+ 
+  storeId             String    @id @db.VarChar(36)
+  lat                 Decimal   @db.Decimal(9, 6) @default(0.0)
+  lng                 Decimal   @db.Decimal(9, 6) @default(0.0)
+  radius              Decimal   @db.Decimal(9, 6) @default(1)
+  city                String    @db.VarChar(50)
+  payments            Json?
+  preparationTime     Int       @default(15)
+  allowScheduling     Boolean   @default(true)
+  allowWithdraw       Boolean   @default(true)
+  schedules           Json? 
+  store               store    @relation(fields: [storeId], references: [id])
+}
+
+model storeDelivery {
+ 
+  storeId             String   @id @db.VarChar(36)
+  deliveryTime        Int      @default(15)
+  deliveryPrice       Decimal  @db.Decimal(9, 2) @default(5)
+  deliveryMinFree     Int      @default(100)
+  allowDeliveryFree   Boolean  @default(false)
+  store               store    @relation(fields: [storeId], references: [id])
+}
+
+model storeUser {
+  id                  String    @id @default(uuid()) @db.VarChar(36)
+  storeId             String    @db.VarChar(36)
+  name                String    @db.VarChar(50)
+  email               String    @db.VarChar(50)
+  password            String    @db.VarChar(100)
+  access              String    @db.VarChar(20)
+  store               store    @relation(fields: [storeId], references: [id]) 
+}
+
+model menu {
+  id         String     @id @default(uuid()) @db.VarChar(36)
+  index      Int?       @default(0)
+  storeId    String     @db.VarChar(36)
+  name       String     @db.VarChar(50)
+  picture    String?    @db.VarChar(150)
+  notes      String?    @db.VarChar(200)
+  schedules  Json? 
+  store      store     @relation(fields: [storeId], references: [id])
+  products   product[]
+}
+
+model product {
+  id          String        @id @default(uuid()) @db.VarChar(36)
+  index       Int?           @default(0)
+  menuId      String        @db.VarChar(36)
+  name        String        @db.VarChar(50)
+  description String?       @db.VarChar(500)
+  picture     String?       @db.VarChar(150)
+  unitPrice   Decimal?      @db.Decimal(10, 2)
+  promoPrice  Decimal?      @db.Decimal(10, 2)
+  promotion   Boolean?
+  activate    Boolean?      @default(false)
+  menu        menu          @relation(fields: [menuId], references: [id])
+  choices     choices[]
+  // order_items order_items[]
+}
+
+// model users {
+//   id                  String    @id @default(uuid()) @db.VarChar(36)
+//   name                String    @db.VarChar(50)
+//   picture             String?   @db.VarChar(150)
+//   email               String    @db.VarChar(50)
+//   password            String?   @db.VarChar(100)
+
+// }
+
+
+
+
+model choices {
+  id           String         @id @default(uuid()) @db.VarChar(36)
+  productId    String         @db.VarChar(36)
+  name         String         @db.VarChar(100)
+  color        String?         @db.VarChar(6)
+  min          Int?
+  max          Int?
+  type         Int?
+  products     product       @relation(fields: [productId], references: [id])
+  garnishItems garnishItems[]
+}
+
+model garnishItems {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  choiceId   String   @db.VarChar(36)
+  name        String   @db.VarChar(50)
+  description String?  @db.VarChar(200)
+  unitPrice       Decimal? @db.Decimal(10, 2)
+  choices     choices  @relation(fields: [choiceId], references: [id])
+}
+
+
+
+// model order_items {
+//   id         String   @id @default(uuid()) @db.VarChar(36)
+//   order_id   String   @db.VarChar(36)
+//   product_id String   @db.VarChar(36)
+//   amount     Int
+//   value      Decimal? @db.Decimal(10, 2)
+//   attributes String?  @db.VarChar(2000)
+//   orders     orders   @relation(fields: [order_id], references: [id])
+//   products   products @relation(fields: [product_id], references: [id])
+// }
+
+// model orders {
+//   id             String        @id @default(uuid()) @db.VarChar(36)
+//   user_id        String        @db.VarChar(36)
+//   store_id       String        @db.VarChar(36)
+//   status         String?       @db.VarChar(50)
+//   ordered_at     DateTime?     @db.Date
+//   address        String?       @db.VarChar(200)
+//   payment_method String?       @db.VarChar(20)
+//   stores         stores        @relation(fields: [store_id], references: [id])
+//   users          users         @relation(fields: [user_id], references: [id])
+//   order_items    order_items[]
+// }
+
