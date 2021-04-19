@@ -116,13 +116,7 @@ Resource('/promotion',require('./controllers/promotion'))
 
 app.listen(8080, () => {
   console.log("   ".format(33))
-  console.log("-----------------○   ○-----------------".format(33))
-  console.log("• Status → ".format("bold").format("33") , " Rodando ".format("bold").format("32"))
-  console.log("• Https → ".format("bold").format("33") , " 10.0.0.29:3333 ".format("bold").format("32"))
-  console.log("• Tecs → ".format("bold").format("33") , " Prisma,Express,Jwt,Socket.io ".format("bold").format("32"))
-  console.log("• Dev → ".format("bold").format("33") , " Gabriel Benites ".format("bold").format("32"))
-  console.log("-----------------○   ○-----------------".format(33))
-  console.table(routes)
-  console.log("-----------------○   ○-----------------".format(33))
+
+  console.log("-----------------○  8080  ○-----------------".format(33))
 })
 
