@@ -114,7 +114,7 @@ Resource('/promotion',require('./controllers/promotion'))
 
 
 
-app.listen(8443, () => {
+app.listen(8080, () => {
   console.log("   ".format(33))
   console.log("-----------------○   ○-----------------".format(33))
   console.log("• Status → ".format("bold").format("33") , " Rodando ".format("bold").format("32"))
@@ -126,8 +126,3 @@ app.listen(8443, () => {
   console.log("-----------------○   ○-----------------".format(33))
 })
 
-var os = require('os');
-
-var networkInterfaces = os.networkInterfaces();
-
-console.log(networkInterfaces);
