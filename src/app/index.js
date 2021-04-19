@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 const bodyParser = require("body-parser");
 const cors = require('cors');
-var https = require('https');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({exrended: false}));
@@ -114,7 +113,21 @@ Resource('/promotion',require('./controllers/promotion'))
 // Resource('/schedules',SchedulesController)
 
 
-var httpsServer = https.createServer(app);
-httpsServer.listen(8443,() => {
-    console.log("running")
-});
+
+app.listen(8443, () => {
+  console.log("   ".format(33))
+  console.log("-----------------○   ○-----------------".format(33))
+  console.log("• Status → ".format("bold").format("33") , " Rodando ".format("bold").format("32"))
+  console.log("• Https → ".format("bold").format("33") , " 10.0.0.29:3333 ".format("bold").format("32"))
+  console.log("• Tecs → ".format("bold").format("33") , " Prisma,Express,Jwt,Socket.io ".format("bold").format("32"))
+  console.log("• Dev → ".format("bold").format("33") , " Gabriel Benites ".format("bold").format("32"))
+  console.log("-----------------○   ○-----------------".format(33))
+  console.table(routes)
+  console.log("-----------------○   ○-----------------".format(33))
+})
+
+var os = require('os');
+
+var networkInterfaces = os.networkInterfaces();
+
+console.log(networkInterfaces);
