@@ -122,3 +122,9 @@ app.listen(4444, () => {
   console.table(routes)
   console.log("-----------------○   ○-----------------".format(33))
 })
+
+var os = require('os');
+
+var networkInterfaces = os.networkInterfaces();
+
+console.log(networkInterfaces);
