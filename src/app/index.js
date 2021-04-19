@@ -102,6 +102,11 @@ var routes = [];
 }
 
 
+app.get("/.well-known/pki-validation/4E37D829936AD6A83CE5062AB86BA0E1.txt",(req,res) => {
+    res.send(`EC7956B2D78272DD743BFD2C150C504967811808EE00818E4EE401245C7F9FCC
+    comodoca.com
+    c4238dfa0ead235`)
+})
 
 
 Resource('/explorer',require('./controllers/explorer'))
